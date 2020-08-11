@@ -1,6 +1,5 @@
 import sqlite3
-import main
-persons = [
+people = [
     ("Jan Nowak", 33),
     ("Krzysztof Krawczyk", 74),
     ("Karol Krawczyk", 44),
@@ -8,31 +7,28 @@ persons = [
     ]
 names = []
 ages = []
-for item in persons:
+for item in people:
     names.append(item[0])
     ages.append(item[1])
 
 
 # play with dict comprehension to create dict
-persons_dict = {k: w for (k, w) in zip(names, ages)}
+people_dict = {k: w for (k, w) in zip(names, ages)}
 
 # sort by last name
-persons_dict = main.sort_by_second_word_dict(persons_dict)
+people_dict = dict(sorted(people_dict.items(), key=lambda x: x[0].split(" ")[1]))
 
-# cast persons into dict easy way
-print(dict(persons))
+# cast people into dict easy way
+print(dict(people))
 
-print(persons_dict)
-
-
-# main.sort_by_second_word_dict(dictionary=persons)
+# main.sort_by_second_word_dict(dictionary=people)
 con = sqlite3.connect(":memory:")
 
 # Create the table
 con.execute("create table person(name, age)")
 
 # Fill the table
-con.executemany("insert into person(name, age) values (?, ?)", persons)
+con.executemany("insert into person(name, age) values (?, ?)", people)
 
 # Print the table contents
 for row in con.execute("select name, age from person"):
